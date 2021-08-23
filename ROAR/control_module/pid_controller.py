@@ -36,19 +36,23 @@ class PIDController(Controller):
         throttle = self.long_pid_controller.run_in_series(next_waypoint=next_waypoint,
                                                           target_speed=kwargs.get("target_speed", self.max_speed))
         steering = self.lat_pid_controller.run_in_series(next_waypoint=next_waypoint)
-        if steering>0.2 and steering<0.4:
+        if steering>0.15 and steering<0.4:
             throttle = (1 - steering * 2.5)
-            steering = 1.2 * steering
+            steering = 1 * steering
         elif steering >=0.4:
-            throttle = 0.2
-            steering = 1.2*steering
+            throttle = steering*2.5-1
+            if throttle>0.2:
+                throttle=0.2
+            steering = 1*steering
             if steering>1:
                 steering=1
         elif steering<-0.15 and steering>-0.4:
             throttle = -(-1 - steering * 2.5)
             steering =1.2*steering
         elif steering<=-0.4:
-            throttle =0.2
+            throttle =steering*2.5+1
+            if throttle<-0.2:
+                throttle=-0.2
             steering=1.2*steering
             if steering<-1:
                 steering=-1
