@@ -48,12 +48,12 @@ class PIDController(Controller):
                 steering=1
         elif steering<-0.15 and steering>-0.4:
             throttle = -(-1 - steering * 2.5)
-            steering =1.2*steering
+            steering =1*steering
         elif steering<=-0.4:
-            throttle =steering*2.5+1
-            if throttle<-0.2:
-                throttle=-0.2
-            steering=1.2*steering
+            throttle =-(steering*2.5+1)
+            if throttle>0.2:
+                throttle=0.2
+            steering=1*steering
             if steering<-1:
                 steering=-1
         return VehicleControl(throttle=throttle, steering=steering)
